@@ -11,6 +11,7 @@ import Dashboard from "./pages/friends/Dashboard";
 import { useAuth } from "./hooks/useAuth"
 import { useEffect } from "react";
 import { GlobalHeader } from "./components/GlobalHeader";
+import GlobalInviteListener from "./pages/friends/components/GlobalInviteListener";
 
 
 interface FriendRequestPayload {
@@ -40,6 +41,7 @@ function App() {
 
   return (
     <>  
+      <GlobalInviteListener />
       <GlobalHeader />
         <main className="app-content">
           <Routes>

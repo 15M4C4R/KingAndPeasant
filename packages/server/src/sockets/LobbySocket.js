@@ -1,3 +1,4 @@
+import { userSockets } from '../../index.js';
 import { lobbyService } from '../services/LobbyService.js';
 
 const pendingLeaves = new Map();
@@ -53,6 +54,38 @@ export const lobbySocket = (io, socket) => {
             }
         } else {
             AuxLeaveLobby(numId, lobbyId, socket, io);
+        }
+    });
+
+    socket.on('inviteToLobby', ({receiverId, lobbyId, senderName}) => {
+        const numReceiverId = Number(receiverId);
+        lobbyService.registerInvitation(lobbyId, receiverId);
+        const receiverSocketId = userSockets.get(numReceiverId);
+        if (receiverSocketId) {
+            io.to(receiverSocketId).emit('gameInviteReceived', {
+                lobbyId,
+                senderName
+            });
+            console.log(`Invitacion enviada a usuario ${receiverId} por parte de ${senderName}`);
+        } else {
+            console.log(`El usuario ${receiverId} no esta conectado.`);
+        }
+
+    });
+
+    socket.on('rejectGameInvite', async ({ lobbyId, rejecterName }) => {
+        const numLobbyId = Number(lobbyId);
+        try{
+            const lobby =  await lobbyService.getLobbyById(numLobbyId);
+            if (lobby && lobby.player1Id) {
+                const hostSocketId = userSockets.get(lobby.player1Id);
+                if (hostSocketId) {
+                    io.to(hostSocketId).emit('inviteRejected', { rejecterName });
+                }
+            }
+            lobbyService.removeInvitation(numLobbyId, socket.userId);
+        } catch (error) {
+            console.error("Error al procesar el rechazo de la invitacion:", error);
         }
     });
 

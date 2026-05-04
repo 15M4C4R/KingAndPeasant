@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import "../SocialPanel.css";
+import { useNavigate } from "react-router-dom";
+import { createLobby } from "../../lobbies/components/LobbyService";
 
 interface User {
     idUser: number;
@@ -8,8 +10,9 @@ interface User {
 }
 
 export default function FriendsList() {
-    const { user } = useAuth();
+    const { user, socket } = useAuth();
     const [friends, setFriends] = useState<User[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (!user) return;
@@ -31,9 +34,22 @@ export default function FriendsList() {
         fetchFriends();
     }, [user]);
 
-    // Función placeholder para el futuro (Chat, Invitar a jugar, etc.)
-    const handleInvite = (friendId: number) => {
-        console.log("Invitando a jugar a:", friendId);
+    const handleInvite = async (friendId: number) => {
+        try {
+            if (user && user.authToken && socket) {
+                const lobbyName = `Partida de ${user.name}`;
+                const newLobby = await createLobby(lobbyName, "PRIVATE", user.id, user.authToken);
+                socket.emit('inviteToLobby', {
+                    receiverId: friendId,
+                    lobbyId: newLobby.id,
+                    senderName: user.name
+                });
+                navigate(`/lobby/${newLobby.id}`);
+            }  
+        } catch (err) {
+            console.error("Error al invitar al amigo:", err);
+            //Podemos añadir un modal para informar al usuario.
+        }
     };
 
     return (

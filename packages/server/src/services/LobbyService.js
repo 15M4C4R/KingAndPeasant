@@ -1,5 +1,29 @@
 import { prisma } from '../../config/db.js';
 
+const pendingInvitations = new Map();
+
+export const registerInvitation = (lobbyId, userId) => {
+    const numLobbyId = Number(lobbyId);
+    const numUserId = Number(userId);
+    
+    if (!pendingInvitations.has(numLobbyId)) {
+        pendingInvitations.set(numLobbyId, new Set());
+    }
+    pendingInvitations.get(numLobbyId).add(Number(numUserId));
+};
+
+export const removeInvitation = (lobbyId, userId) => {
+    const numLobbyId = Number(lobbyId);
+    const numUserId = Number(userId);
+    
+    if (pendingInvitations.has(numLobbyId)) {
+        pendingInvitations.get(numLobbyId).delete(numUserId);
+        if (pendingInvitations.get(numLobbyId).size === 0) {
+            pendingInvitations.delete(numLobbyId);
+        }
+    }
+};
+
 const getAllLobbies = async () => {
     return await prisma.lobby.findMany();
 };
@@ -62,7 +86,11 @@ const joinLobby = async ({ lobbyId, player2Id }) => {
 
     // 2. Comprobar si el lobby es privado
     if (lobby.privacy === 'PRIVATE') {
-        throw new Error('No puedes unirte a una partida privada sin invitación.');
+        const isInvited = pendingInvitations.get(Number(lobbyId))?.has(Number(player2Id));
+        if (!isInvited) { 
+            throw new Error('No puedes unirte a una partida privada sin invitación.');
+        }
+        pendingInvitations.get(Number(lobbyId)).delete(Number(player2Id)); 
     }
 
     // 3. Comprobar si el lobby ya está lleno
@@ -75,8 +103,8 @@ const joinLobby = async ({ lobbyId, player2Id }) => {
     }
 
     return await prisma.lobby.update({
-        where: { id: lobbyId },
-        data: { player2Id: player2Id },
+        where: { id: Number(lobbyId) },
+        data: { player2Id: Number(player2Id) },
     });
 };
 
@@ -170,5 +198,7 @@ export const lobbyService = {
     setPlayerReady,
     setLobbyOngoing,
     getUserActiveLobby,
-    setLobbyWaiting
+    setLobbyWaiting,
+    registerInvitation,
+    removeInvitation
 };

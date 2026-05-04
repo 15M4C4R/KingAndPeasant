@@ -19,6 +19,8 @@ function LobbyRoom() {
     message: string;
     confirmAction?: "START" | "LEAVE";
     } | null>(null);
+  const [showRejectionModal, setShowRejectionModal] = useState(false);
+  const [rejectionMessage, setRejectionMessage] = useState("");
   const { user, isLogin} = useUser();
   const { socket } = useAuth();
   const navigate = useNavigate();
@@ -45,6 +47,22 @@ function LobbyRoom() {
             window.removeEventListener('beforeunload', handleUnload);
         };
     }, [socket, id, user?.id]);
+
+    useEffect(() => {
+        if (!socket) return;
+
+        const handleRejection = ({ rejecterName }: { rejecterName: string}) => {
+            setRejectionMessage(`Tu invitación ha sido rechazada por ${rejecterName}.`);
+            setShowRejectionModal(true);
+        }
+
+        socket.on('inviteRejected', handleRejection);
+
+        return () => {
+            socket.off('inviteRejected');
+        };
+    }, [socket]);
+
 
   const fetchLobby = async (showLoading = false) => {
     if(!user) return;
@@ -117,6 +135,26 @@ function LobbyRoom() {
       confirmAction: "START"
     });
   };
+
+  const handleExitAfterRejection = async () => {
+    if (!user || !id || !user.authToken || !socket) return;
+
+    try {
+        const lobbyId = Number(id);
+        const userId = user.id.toString();
+
+        await leaveLobby(lobbyId, userId, user.authToken);
+
+        socket.emit('leaveLobby', user.id, id, true);
+        
+        setShowRejectionModal(false);
+        navigate("/lobbyList");
+    } catch (error) {
+        console.error("Error al salir del lobby despues de la invitacion rechazada:", error);
+        setShowRejectionModal(false);
+        navigate("/lobbyList");
+    }
+  }
 
   const executeStartGame = async () => {
     setAnnouncement(null); // Cerramos el modal primero
@@ -202,7 +240,16 @@ function LobbyRoom() {
               announcement?.confirmAction === "LEAVE" ? "ABANDONAR" : 
               "CONTINUAR"
           }
-      />
+        />
+
+        <AnnouncementModal
+            isOpen={showRejectionModal}
+            onClose={() => setShowRejectionModal(false)}
+            onConfirm={handleExitAfterRejection}
+            title="Invitación Rechazada"
+            message={rejectionMessage}
+            confirmText="Salir del Lobby"
+        />
 
     </div>
   );
