@@ -11,6 +11,7 @@ import Dashboard from "./pages/friends/Dashboard";
 import { useAuth } from "./hooks/useAuth"
 import { useEffect } from "react";
 import { GlobalHeader } from "./components/GlobalHeader";
+import Rules from "./pages/rules/Rules";
 
 
 interface FriendRequestPayload {
@@ -46,6 +47,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login/>}/>
             <Route path="/register" element={<Register/>}/>
+            <Route path="/rules" element={<Rules />} />
             <Route path="/lobbyList" element={<LobbyList />} />
             <Route path="/lobby/:id" element={<LobbyRoom />} />
             <Route path="/game/:id" element={<Game />} />
