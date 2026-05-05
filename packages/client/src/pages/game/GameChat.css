@@ -1,10 +1,12 @@
+/* GameChat.css */
+
 .chat-container {
-  /* Quitamos width: 300px y height: 300px; */
-  width: 90%;         /* Ocupa el 90% del ancho del sidebar para dejar un margencito */
-  flex: 0.5; 
-  max-height: calc(100% - 100px); /* Evita que choque con el borde inferior */
+  width: 90%;
+  flex: 1; 
+  min-height: 0; 
+  /* LÍMITE VITAL: Le decimos que crezca, pero que NUNCA pase de 220px de alto */
+  max-height: 220px; 
   margin-bottom: 10px;
-  /* El resto de tus estilos se quedan igual: */
   border: 1px solid #ccc;
   border-radius: 8px;
   display: flex;
@@ -14,34 +16,42 @@
 
 .chat-header {
   margin: 0;
-  padding: 10px;
+  /* AJUSTE: Reducimos el padding y tamaño de fuente para ahorrar espacio */
+  padding: 6px; 
+  font-size: 0.9rem;
+  font-weight: bold;
+  background-color: rgba(0, 0, 0, 0.1);
   border-bottom: 1px solid #ccc;
   text-align: center;
 }
 
 .chat-messages-area {
   flex: 1;
-  overflow-y: auto;
-  padding: 10px;
+  overflow-y: auto; 
+  padding: 8px;
   display: flex;
   flex-direction: column;
+  /* Estilo de la barra de scroll para que no moleste */
+  scrollbar-width: thin; 
 }
 
 .chat-message {
-  margin-bottom: 8px;
-  line-height: 1.4;
+  margin-bottom: 6px;
+  line-height: 1.3;
+  font-size: 0.85rem; /* Texto de los mensajes un pelín más pequeño */
 }
 
 .chat-sender {
   font-weight: bold;
-  color: #2c3e50;
+  color: #d4af37; /* Le damos un toque dorado para que encaje con tu diseño */
+  margin-right: 5px;
 }
 
 .chat-empty {
   color: #888;
-  font-size: 0.9em;
+  font-size: 0.85em;
   text-align: center;
-  margin-top: 20px;
+  margin-top: 15px;
 }
 
 .chat-form {
@@ -51,16 +61,21 @@
 
 .chat-input {
   flex: 1;
-  padding: 10px;
+  /* AJUSTE: Reducimos la altura de la caja de texto */
+  padding: 8px; 
   border: none;
   outline: none;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
 .chat-submit-btn {
-  padding: 10px 15px;
+  /* AJUSTE: Igualamos la altura con el input */
+  padding: 8px 12px; 
   cursor: pointer;
   border: none;
   background-color: #e0e0e0;
+  color: #333;
   font-weight: bold;
   transition: background-color 0.2s;
 }

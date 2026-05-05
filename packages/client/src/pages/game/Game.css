@@ -4,13 +4,21 @@
 .game-board {
   display: flex;
   flex-direction: row;
-  height: 130vh;
+  /* CAMBIO: Usamos 100dvh (Dynamic Viewport Height) para ocupar exactamente la pantalla, 
+     evitando problemas con las barras de navegación en móviles */
+  height: 100dvh; 
   width: 100vw;
   background-color: #2c3e50;
   color: white;
   padding: 15px;
   box-sizing: border-box;
-  overflow: hidden; /* Evita que la pantalla entera haga scroll */
+  overflow: hidden; /* Esto está perfecto para evitar el scroll */
+  
+  /* Asegúrate de resetear márgenes por si el body tiene alguno */
+  margin: 0;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .game-main-area {
