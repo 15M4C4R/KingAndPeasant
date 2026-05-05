@@ -82,22 +82,6 @@ export const joinLobby = async (lobbyId: number, player2Id: string | null, token
     return await response.json();
 };
 
-export const leaveLobby = async (lobbyId: number, playerId: string | null, token: string) => {
-    const response = await fetch(API_URL + `/${lobbyId}/leave`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-        body: JSON.stringify({ 
-            playerId: playerId
-        }),
-    });
-    if (!response.ok) {
-        const error = await response.json();
-        const errorMessage = error.message || error.error || 'Error desconocido del servidor';
-        throw new Error(errorMessage);
-    }
-    return await response.json();
-};
-
 export const setPlayerReady = async (lobbyId: number, playerId: string | null, isReady: boolean, token: string) => {
     const response = await fetch(API_URL + `/${lobbyId}/setReady`, {
         method: 'POST',

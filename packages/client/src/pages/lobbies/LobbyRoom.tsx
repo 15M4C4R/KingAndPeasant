@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import PlayerCard from "./components/PlayerCard";
 import "./LobbyRoom.css";
-import { getLobbyById, leaveLobby, setPlayerReady, type LobbyBackend } from "./components/LobbyService";
+import { getLobbyById, setPlayerReady, type LobbyBackend } from "./components/LobbyService";
 import { startGame } from "../game/components/GameService";
 import { useNavigate, useParams } from "react-router";
 import { useUser } from "../../hooks/useUser";
@@ -115,6 +115,7 @@ function LobbyRoom() {
 
   const executeLeave = async () => {
     setAnnouncement(null);
+    setShowRejectionModal(false);
     if(!lobby || !user) return;
     
     try {
@@ -135,26 +136,6 @@ function LobbyRoom() {
       confirmAction: "START"
     });
   };
-
-  const handleExitAfterRejection = async () => {
-    if (!user || !id || !user.authToken || !socket) return;
-
-    try {
-        const lobbyId = Number(id);
-        const userId = user.id.toString();
-
-        await leaveLobby(lobbyId, userId, user.authToken);
-
-        socket.emit('leaveLobby', user.id, id, true);
-        
-        setShowRejectionModal(false);
-        navigate("/lobbyList");
-    } catch (error) {
-        console.error("Error al salir del lobby despues de la invitacion rechazada:", error);
-        setShowRejectionModal(false);
-        navigate("/lobbyList");
-    }
-  }
 
   const executeStartGame = async () => {
     setAnnouncement(null); // Cerramos el modal primero
@@ -245,7 +226,7 @@ function LobbyRoom() {
         <AnnouncementModal
             isOpen={showRejectionModal}
             onClose={() => setShowRejectionModal(false)}
-            onConfirm={handleExitAfterRejection}
+            onConfirm={executeLeave}
             title="Invitación Rechazada"
             message={rejectionMessage}
             confirmText="Salir del Lobby"

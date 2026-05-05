@@ -73,7 +73,7 @@ export const lobbySocket = (io, socket) => {
 
     });
 
-    socket.on('rejectGameInvite', async ({ lobbyId, rejecterName }) => {
+    socket.on('rejectGameInvite', async ({ lobbyId, rejecterName, rejecterId }) => {
         const numLobbyId = Number(lobbyId);
         try{
             const lobby =  await lobbyService.getLobbyById(numLobbyId);
@@ -83,7 +83,7 @@ export const lobbySocket = (io, socket) => {
                     io.to(hostSocketId).emit('inviteRejected', { rejecterName });
                 }
             }
-            lobbyService.removeInvitation(numLobbyId, socket.userId);
+            lobbyService.removeInvitation(numLobbyId, rejecterId);
         } catch (error) {
             console.error("Error al procesar el rechazo de la invitacion:", error);
         }
