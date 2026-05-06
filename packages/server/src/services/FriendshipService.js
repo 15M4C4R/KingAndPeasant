@@ -110,6 +110,7 @@ const updateFriendshipStatus = async (idFriendship, newStatus) => {
             status: newStatus
         }
     })
+    return friendship;
 }
 
 export const friendshipService = {

@@ -8,41 +8,17 @@ import Game from "./pages/game/Game";
 import Profile from "./pages/profile/Profile";
 import EditProfile from "./pages/profile/EditProfile";
 import Dashboard from "./pages/friends/Dashboard";
-import { useAuth } from "./hooks/useAuth"
-import { useEffect } from "react";
 import { GlobalHeader } from "./components/GlobalHeader";
 import GlobalInviteListener from "./pages/friends/components/GlobalInviteListener";
 import Rules from "./pages/rules/Rules";
-
-
-interface FriendRequestPayload {
-  senderId: string;
-  senderName: string;
-}
+import GlobalFriendRequestListener from "./pages/friends/components/GlobalFriendRequestListener";
 
 function App() {
-
-  const {socket} = useAuth();
-
-  useEffect(() => {
-    if (!socket) return;
-    
-    const handleFriendRequest = (data: FriendRequestPayload) =>{
-      console.log("Friend Request received: ", data);
-      alert(`¡${data.senderName || 'Alguien'} quiere ser tu amigo!`);
-    }
-
-    socket.on('friendRequest', handleFriendRequest);
-
-    return () => {
-      socket.off('friendRequest', handleFriendRequest);
-    };
-    
-  }, [socket]);
 
   return (
     <>  
       <GlobalInviteListener />
+      <GlobalFriendRequestListener />
       <GlobalHeader />
         <main className="app-content">
           <Routes>
