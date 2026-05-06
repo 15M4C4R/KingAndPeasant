@@ -12,6 +12,7 @@ interface User {
 export default function FriendsList() {
     const { user, socket } = useAuth();
     const [friends, setFriends] = useState<User[]>([]);
+    const [onlineIds, setOnlineIds] = useState<number[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -33,6 +34,18 @@ export default function FriendsList() {
 
         fetchFriends();
     }, [user]);
+
+    useEffect(() => {
+        if (!socket) return;
+
+        socket.emit('getOnlineUsers', (ids: number[]) => {
+            setOnlineIds(ids);
+        });
+
+        return () => {
+            socket.off('connect');
+        };
+    }, [socket]);
 
     const handleInvite = async (friendId: number) => {
         try {
@@ -60,20 +73,27 @@ export default function FriendsList() {
                 <p style={{ color: '#888' }}>You do not have any friends yet</p>
             ) : (
                 <div className="user-list">
-                    {friends.map((friend) => (
-                        <div key={friend.idUser} className="user-card friend">
-                            <div className="user-info">
-                                <span className="user-name">🟢 {friend.name}</span>
+                    {friends.map((friend) => {
+
+                        const isOnline = onlineIds.includes(friend.idUser);
+                        
+                        return (
+                            <div key={friend.idUser} className="user-card friend">
+                                <div className="user-info">
+                                    <span className="user-name">
+                                        {isOnline ? '🟢' : '🔴'} {friend.name}
+                                    </span>
+                                </div>
+                            
+                                <button 
+                                    onClick={() => handleInvite(friend.idUser)} 
+                                    className="action-btn btn-blue" 
+                                >
+                                    Play
+                                </button>
                             </div>
-                           
-                            <button 
-                                onClick={() => handleInvite(friend.idUser)} 
-                                className="action-btn btn-blue" 
-                            >
-                                Play
-                            </button>
-                        </div>
-                    ))}
+                        );
+                    })}
                 </div>
             )}
         </div>

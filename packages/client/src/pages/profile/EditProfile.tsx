@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { useUser } from "../../hooks/useUser";
 import "../../components/ParchmentMenu.css";
+import "./Profile.css";
 
 const EditProfile = () => {
     const { user, isLogin, login } = useUser();
@@ -65,62 +66,62 @@ const EditProfile = () => {
     };
 
     return (
-        <div className="menu-container">
-            <div className="menu-card">
-                <h2 className="menu-title">Edit Profile</h2>
+    <div className="menu-container">
+        <div className="menu-card">
+            <h2 className="menu-title">Edit Profile</h2>
 
-                {success && <div style={{ color: 'green', marginBottom: '10px' }}>¡Changes saved!</div>}
-                {error && <div className="menu-error">{error}</div>}
+            {success && <div style={{ color: 'green', marginBottom: '10px' }}>¡Changes saved!</div>}
+            {error && <div className="menu-error">{error}</div>}
 
-                <form className="menu-form" onSubmit={handleSubmit}>
-                    
-                    <div style={{ textAlign: "left", marginBottom: "10px" }}>
-                        <label style={{ fontWeight: "bold", fontSize: "0.9rem" }}>Lord's Name</label>
-                        <input
-                            className="menu-input"
-                            type="text"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
-                    </div>
+            <form className="menu-form" onSubmit={handleSubmit}>
+                
+                <div>
+                    <label>Lord's Name</label>
+                    <input
+                        className="menu-input"
+                        type="text"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        required
+                    />
+                </div>
 
-                    <div style={{ textAlign: "left", marginBottom: "10px" }}>
-                        <label style={{ fontWeight: "bold", fontSize: "0.9rem" }}>Lord's Email</label>
-                        <input
-                            className="menu-input"
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
-                    </div>
+                <div>
+                    <label>Lord's Email</label>
+                    <input
+                        className="menu-input"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
+                    />
+                </div>
 
-                    <div style={{ textAlign: "left", marginBottom: "20px" }}>
-                        <label style={{ fontWeight: "bold", fontSize: "0.9rem" }}>New Password</label>
-                        <input
-                            className="menu-input"
-                            type="password"
-                            placeholder="Leave empty to keep the current one"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                        <small style={{ color: "#666", fontSize: "0.8rem" }}>
-                            * Leave empty to keep the current one.
-                        </small>
-                    </div>
+                <div>
+                    <label>New Password</label>
+                    <input
+                        className="menu-input"
+                        type="password"
+                        placeholder="Leave empty to keep the current one"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                    />
+                    <small>
+                        * Leave empty to keep the current one.
+                    </small>
+                </div>
 
-                    <button className="menu-button" type="submit">
-                        Save Changes
-                    </button>
+                <button className="menu-button" type="submit">
+                    Save Changes
+                </button>
 
-                    <Link to="/profile" className="menu-link" style={{ display: 'block', marginTop: '15px' }}>
-                        Cancel
-                    </Link>
-                </form>
-            </div>
+                <Link to="/profile" className="menu-link" style={{ display: 'block', marginTop: '5px' }}>
+                    Cancel
+                </Link>
+            </form>
         </div>
-    );
+    </div>
+);
 };
 
 export default EditProfile;

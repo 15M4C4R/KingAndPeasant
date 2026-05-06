@@ -19,7 +19,7 @@
 
 .profile-divider {
     border: 0; /* Quitamos borde por defecto */
-    border-top: 1px solid #eee;
+    border-top: 1px solid #444;
     margin: 20px 0;
 }
 
@@ -38,7 +38,6 @@
 
 .stat-box {
     text-align: center;
-    /* Opcional: Añadir un pequeño hover */
     transition: transform 0.2s;
 }
 
@@ -57,9 +56,8 @@
     font-weight: bold;
 }
 
-/* Modificadores de color para los números */
-.stat-number.win { color: #2e7d32; } /* Verde oscuro */
-.stat-number.loss { color: #c62828; } /* Rojo oscuro */
+.stat-number.win { color: #2e7d32; } 
+.stat-number.loss { color: #c62828; }
 
 .stat-label {
     font-size: 0.8rem;
@@ -67,7 +65,6 @@
     margin-top: 2px;
 }
 
-/* Para convertir el Link en un bloque botón */
 .btn-block {
     display: block;
     text-align: center;

@@ -66,6 +66,12 @@ io.on('connection', (socket) => {
         
         console.log('A user disconnected:', socket.id);
     });
+
+    socket.on('getOnlineUsers', (callback) => {
+        const onlineIds = Array.from(userSockets.keys()).map(id => Number(id));
+        callback(onlineIds);
+    });
+
 });
 
 app.set('io', io);
