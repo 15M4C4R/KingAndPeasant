@@ -61,16 +61,15 @@ export default function FriendsList() {
             }  
         } catch (err) {
             console.error("Error al invitar al amigo:", err);
-            //Podemos añadir un modal para informar al usuario.
         }
     };
 
     return (
-        <div className="social-panel"> {/* Reutilizamos la clase del contenedor */}
-            <h3>My Friends ({friends.length})</h3>
+        <div className="social-panel">
+            <h3>Mis amigos({friends.length})</h3>
             
             {friends.length === 0 ? (
-                <p style={{ color: '#888' }}>You do not have any friends yet</p>
+                <p style={{ color: '#888' }}>Aún no tienes amigos</p>
             ) : (
                 <div className="user-list">
                     {friends.map((friend) => {
@@ -89,7 +88,7 @@ export default function FriendsList() {
                                     onClick={() => handleInvite(friend.idUser)} 
                                     className="action-btn btn-blue" 
                                 >
-                                    Play
+                                    Jugar
                                 </button>
                             </div>
                         );

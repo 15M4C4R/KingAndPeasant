@@ -12,7 +12,6 @@ const Dashboard = () => {
     const { user, isLogin } = useAuth();
     const navigate = useNavigate();
 
-    // Protección de ruta: Si no está logueado, fuera
     useEffect(() => {
         if (!isLogin) navigate("/login");
     }, [isLogin, navigate]);
@@ -20,7 +19,7 @@ const Dashboard = () => {
     return (
         <div className="dashboard-container">
             <header className="dashboard-header">
-                <h1>Welcome, {user?.name || "Viajero"} .</h1>
+                <h1>Bienvenido, {user?.name || "Viajero"} .</h1>
                 <p className="dashboard-subtitle"></p>
             </header>
 
@@ -43,7 +42,7 @@ const Dashboard = () => {
             </div>
             
             <Link to="/" className="auth-link link-block">
-                Return to the Kingdom.
+                Regresa al Reino.
             </Link>
 
         </div>

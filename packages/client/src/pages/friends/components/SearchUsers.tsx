@@ -51,13 +51,13 @@ const SearchUsers = () => {
 
             if (!response.ok) {
                 const errorData = data as unknown as { message: string };
-                throw new Error(errorData.message || "Error fetching users");
+                throw new Error(errorData.message || "Error al recuperar usuarios");
             }
 
-            console.log("Users found:", data);
+            console.log("Usuario no encontrado:", data);
         } catch(err) {
             console.error(err);
-            setError("An error ocurred while searching for users: " + err + ". Please try again.")
+            setError("Se produjo un error al buscar los usuarios: " + err + ". Por favor inténtalo de nuevo.")
         }
     };
 
@@ -88,15 +88,13 @@ const SearchUsers = () => {
 
     } catch(err) {
         console.error(err);
-        setError("An error ocurred while sending the friend request: " + err + ". Please try again.")
-    }
-        // Aquí conectaremos el socket/api en el siguiente paso
-    };
+        setError("Se produjo un error al enviar la solicitud de amistad: " + err + ". Por favor inténtalo de nuevo.")
+    }};
 
     return (<div className="social-panel">
-                <h2>Search for a user</h2>
+                <h2>Buscar un usuario</h2>
                 <form className="search-form" onSubmit={handleSubmit}>
-                    <label style={{ fontWeight: "bold", fontSize: "0.9rem" }}>Lord's Name</label>
+                    <label style={{ fontWeight: "bold", fontSize: "0.9rem" }}>Nombre del Señor</label>
                     <input
                         className="social-input"
                         type="text"
@@ -106,7 +104,7 @@ const SearchUsers = () => {
                     />
                 
                     <button className="action-btn btn-gold" type="submit">
-                        Find Users
+                        Encontrar usuarios
                     </button>
                 </form>
 
@@ -128,7 +126,7 @@ const SearchUsers = () => {
                             </div>
                         ))
                     ) : (
-                        hasSearched && !error && <p className="no-results">Users not found!</p>
+                        hasSearched && !error && <p className="no-results">Usuarios no encontrados!</p>
                     )}
                 </div>
             </div>

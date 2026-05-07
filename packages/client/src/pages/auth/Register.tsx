@@ -31,27 +31,26 @@ const Register = () => {
             } else {
                 const data = await res.json();
                 
-                // Comprobamos si el backend envió el array detallado de errores
                 if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
                     const detailedErrors = data.errors.map((err: { message: string }) => err.message).join(' | ');
                     setError(detailedErrors);
                 } else {
-                    setError(data.message || data.error || "Registration failed");
+                    setError(data.message || data.error || "Registro fallido");
                 }
             }
         })
         .catch((err) => {
             const errMsg = err instanceof Error ? err.message : err;
-            setError("An error occurred: " + errMsg + ". Please try again.");
+            setError("Ha ocurrido un error: " + errMsg + ". Por favor inténtelo de nuevo.");
         });
     };
 
     return (
-        <ParchmentCard title="New Lord">
+        <ParchmentCard title="Nuevo señor">
             <form className="menu-form" onSubmit={handleSubmit}>
                 <FormInput
                     type="text"
-                    placeholder="Name"
+                    placeholder="Nombre"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     required
@@ -65,21 +64,21 @@ const Register = () => {
                 />
                 <FormInput
                     type="password"
-                    placeholder="Password"
+                    placeholder="Contraseña"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <MenuButton type="submit">Register</MenuButton>
+                <MenuButton type="submit">Registrar</MenuButton>
             </form>
             {error && <div className="menu-error">{error}</div>}
 
             <Link to="/login" className="menu-link">
-                Do you already have a crown? Enter here
+                ¿Ya tienes una corona? Entra aquí.
             </Link>
 
             <Link to="/" className="menu-link">
-                Return to the kingdom
+                Regreso al reino
             </Link>
         </ParchmentCard>
     );      

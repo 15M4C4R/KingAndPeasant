@@ -33,7 +33,7 @@ export default function FriendRequestsList() {
                     setRequests(data);
                 }
             } catch (err) {
-                console.error("Error listing requests", err);
+                console.error("Error al listar solicitudes", err);
             }
         };
 
@@ -44,7 +44,7 @@ export default function FriendRequestsList() {
         if (!socket) return;
 
         socket.on("friendRequest", (newRequestData: SocketRequestData) => {
-            console.log("New Friend Request!", newRequestData);
+            console.log("¡Nueva solicitud de amistad!", newRequestData);
             
             const newReq: FriendRequest = {
                 idFriendship: Date.now(), 
@@ -74,7 +74,7 @@ export default function FriendRequestsList() {
                 body: JSON.stringify({friendshipId, action})
             });
             if (!res) {
-                throw new Error("Error updating friendship's status");
+                throw new Error("Error al actualizar el estado de la amistad.");
             }
         } catch (err) {
             console.error(err);
@@ -85,7 +85,7 @@ export default function FriendRequestsList() {
 
     return (
         <div className="social-panel">
-            <h3>Friend Requests({requests.length})</h3>
+            <h3>Solicitudes de amistad({requests.length})</h3>
             <div className="user-list">
                 {requests.map((req) => (
                     <div key={req.idFriendship} className="user-card request">

@@ -61,22 +61,22 @@ const EditProfile = () => {
 
         } catch (err) {
             console.error(err)
-            setError("An error ocurred: " + err + ". Please try again.")
+            setError("Ha ocurrido un error: " + err + ". Por favor inténtelo de nuevo.")
         }
     };
 
     return (
     <div className="menu-container">
         <div className="menu-card">
-            <h2 className="menu-title">Edit Profile</h2>
+            <h2 className="menu-title">Editar perfil</h2>
 
-            {success && <div style={{ color: 'green', marginBottom: '10px' }}>¡Changes saved!</div>}
+            {success && <div style={{ color: 'green', marginBottom: '10px' }}>¡Cambios guardados!</div>}
             {error && <div className="menu-error">{error}</div>}
 
             <form className="menu-form" onSubmit={handleSubmit}>
                 
                 <div>
-                    <label>Lord's Name</label>
+                    <label>Nombre del Señor</label>
                     <input
                         className="menu-input"
                         type="text"
@@ -87,7 +87,7 @@ const EditProfile = () => {
                 </div>
 
                 <div>
-                    <label>Lord's Email</label>
+                    <label>Email del Señor</label>
                     <input
                         className="menu-input"
                         type="email"
@@ -98,25 +98,25 @@ const EditProfile = () => {
                 </div>
 
                 <div>
-                    <label>New Password</label>
+                    <label>Nueva Contraseña</label>
                     <input
                         className="menu-input"
                         type="password"
-                        placeholder="Leave empty to keep the current one"
+                        placeholder="Dejar vacío para mantener el actual"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                     />
                     <small>
-                        * Leave empty to keep the current one.
+                        * Dejar vacío para mantener el actual.
                     </small>
                 </div>
 
                 <button className="menu-button" type="submit">
-                    Save Changes
+                    Guardar cambios
                 </button>
 
                 <Link to="/profile" className="menu-link" style={{ display: 'block', marginTop: '5px' }}>
-                    Cancel
+                    Cancelar
                 </Link>
             </form>
         </div>

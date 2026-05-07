@@ -36,10 +36,10 @@ const Profile = () => {
                     setCreatedAt(data.createdAt);
                 } else {
                     const data = await response.json();
-                    setError(data.message || "Fetching user data failed");
+                    setError(data.message || "Falló la obtención de datos de usuario.");
                 }
             } catch (err) {
-                setError("An error ocurred: " + err + ". Please try again.")
+                setError("Ha ocurrido un error: " + err + ". Por favor inténtalo de nuevo.")
             }
         }
         localData();
@@ -50,7 +50,7 @@ const Profile = () => {
             <div className="menu-container">
                 <div className="menu-card">
                     <div className="menu-error">{error}</div>
-                    <Link to="/" className="menu-link">Return to the Kingdom</Link>
+                    <Link to="/" className="menu-link">Regreso al Reino</Link>
                 </div>
             </div>
         );
@@ -59,48 +59,48 @@ const Profile = () => {
     return (
         <div className="menu-container">
             <div className="menu-card">
-                <h2 className="menu-title">Lord Profile {name}</h2>
+                <h2 className="menu-title">Perfil del Señor {name}</h2>
 
                 <div className="profile-info">
                     <p className="profile-text">
                         <strong>Email:</strong> {email}
                     </p>
                     <p className="profile-date">
-                        <strong>Joined on the:</strong> {createdAt ? new Date(createdAt).toLocaleDateString() : 'Desconocido'}
+                        <strong>Se unió el:</strong> {createdAt ? new Date(createdAt).toLocaleDateString() : 'Desconocido'}
                     </p>
                 </div>
 
                 <hr className="profile-divider" />
 
-                <h3 className="stats-title">War statistics</h3>
+                <h3 className="stats-title">Estadísticas de guerra</h3>
                 
                 <div className="stats-grid">
 
                     <div className="stat-box">
                         <span className="stat-icon">⚔️</span>
                         <strong className="stat-number">{games}</strong>
-                        <div className="stat-label">Games</div>
+                        <div className="stat-label">Partidas</div>
                     </div>
 
                     <div className="stat-box">
                         <span className="stat-icon">🏆</span>
                         <strong className="stat-number win">{wins}</strong>
-                        <div className="stat-label">Wins</div>
+                        <div className="stat-label">Victorias</div>
                     </div>
 
                     <div className="stat-box">
                         <span className="stat-icon">☠️</span>
                         <strong className="stat-number loss">{losses}</strong>
-                        <div className="stat-label">Defeats</div>
+                        <div className="stat-label">Derrotas</div>
                     </div>
                 </div>
 
                 <Link to="/editProfile" state={{name, email}} className="menu-button btn-block">
-                    Edit my profile.
+                    Editar mi perfil.
                 </Link>
 
                 <Link to="/" className="menu-link link-block">
-                    Return to the Kingdom.
+                    Regresa al Reino.
                 </Link>
 
             </div>

@@ -42,23 +42,22 @@ const Login = () => {
             } else {
                 const data = await res.json();
                 
-                // Comprobamos si el backend envió el array detallado de errores
                 if (data.errors && Array.isArray(data.errors) && data.errors.length > 0) {
                     const detailedErrors = data.errors.map((err: { message: string }) => err.message).join(' | ');
                     setError(detailedErrors);
                 } else {
-                    setError(data.message || data.error || "Registration failed");
+                    setError(data.message || data.error || "Error de inicio de sesion");
                 }
             }
         })
         .catch((err) => {
             const errMsg = err instanceof Error ? err.message : err;
-            setError("An error occurred: " + errMsg + ". Please try again.");
+            setError("Ha ocurrido un error: " + errMsg + ". Por favor inténtelo de nuevo.");
         });
     };
     
     return (
-        <ParchmentCard title="Login to the Kingdom">
+        <ParchmentCard title="Inicia sesión en el Reino">
                 <form className="menu-form" onSubmit = {handleSubmit}>
                     <FormInput
                         type="email"
@@ -69,7 +68,7 @@ const Login = () => {
                     />
                     <FormInput
                         type="password"
-                        placeholder="Password"
+                        placeholder="Contraseña"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
@@ -79,11 +78,11 @@ const Login = () => {
                 {error && <div className="menu-error">{error}</div>}
 
                 <Link to="/register" className="menu-link">
-                    Don't you have a crown yet? Register here
+                    ¿Aún no tienes corona? Regístrate aquí.
                 </Link>
 
                 <Link to="/" className="menu-link">
-                    Return to the kingdom
+                    Regreso al reino
                 </Link>
         </ParchmentCard>
     )
