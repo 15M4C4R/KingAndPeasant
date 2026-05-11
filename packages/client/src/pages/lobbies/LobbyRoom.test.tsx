@@ -149,6 +149,35 @@ describe('LobbyRoom Component', () => {
     });
   });
 
+  test('debe abrir el modal de confirmación, emitir leaveLobby por socket y navegar a la lista', async () => {
+    (getLobbyById as any).mockResolvedValue({
+      id: 1, name: 'Sala Épica', player1Id: 1, status: 'WAITING'
+    });
+
+    const mockSocketEmit = vi.fn();
+    (useAuth as any).mockReturnValue({
+      socket: { emit: mockSocketEmit, on: vi.fn(), off: vi.fn() }
+    });
+
+    render(<BrowserRouter><LobbyRoom /></BrowserRouter>);
+
+    expect(await screen.findByText(/SALA #1/i)).toBeInTheDocument();
+
+    const btnLeave = await screen.findByRole('button', { name: /SALIR DEL LOBBY/i });
+    fireEvent.click(btnLeave);
+
+    expect(screen.getByText(/ABANDONAR SALA/i)).toBeInTheDocument();
+
+    const btnConfirmLeave = screen.getByRole('button', { name: /ABANDONAR/i });
+    fireEvent.click(btnConfirmLeave);
+
+    await waitFor(() => {
+        expect(mockSocketEmit).toHaveBeenCalledWith('leaveLobby', 1, '1', true);
+        
+        expect(mockNavigate).toHaveBeenCalledWith('/lobbyList');
+    });
+  });
+
   test('Línea cubierta: catch de executeLeave (No se pudo salir del lobby)', async () => {
     (getLobbyById as any).mockResolvedValue({
         id: 1, player1Id: 1, status: 'WAITING'

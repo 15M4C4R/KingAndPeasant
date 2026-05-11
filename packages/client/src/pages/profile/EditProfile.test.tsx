@@ -80,7 +80,7 @@ describe('EditProfile page', () => {
     await userEvent.type(nameInput, 'John Updated');
     await userEvent.clear(emailInput);
     await userEvent.type(emailInput, 'updated@test.com');
-    await userEvent.click(screen.getByRole('button', { name: 'Save Changes' }));
+    await userEvent.click(screen.getByRole('button', { name: 'Guardar cambios' }));
 
     await waitFor(() => {
       expect(fetch).toHaveBeenCalledTimes(1);

@@ -4,7 +4,6 @@ import {
     createLobby, 
     getLobbyById, 
     joinLobby, 
-    leaveLobby, 
     setPlayerReady, 
     getMyLobby 
 } from './LobbyService'; // Asegúrate de que el nombre del archivo coincide
@@ -141,32 +140,6 @@ describe('LobbyService API', () => {
             });
 
             await expect(joinLobby(1, '2', MOCK_TOKEN)).rejects.toThrow('Sala llena');
-        });
-    });
-
-    describe('leaveLobby', () => {
-        test('Abandona la sala inyectando el token en headers', async () => {
-            (globalThis.fetch as any).mockResolvedValueOnce({
-                ok: true,
-                json: async () => ({ success: true })
-            });
-
-            await leaveLobby(1, '2', MOCK_TOKEN);
-            
-            expect(globalThis.fetch).toHaveBeenCalledWith('http://localhost:3000/api/lobby/1/leave', expect.objectContaining({
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MOCK_TOKEN}` },
-                body: JSON.stringify({ playerId: '2' })
-            }));
-        });
-
-        test('Lanza error si falla al salir', async () => {
-            (globalThis.fetch as any).mockResolvedValueOnce({
-                ok: false,
-                json: async () => ({ message: 'No estás en la sala' })
-            });
-
-            await expect(leaveLobby(1, '2', MOCK_TOKEN)).rejects.toThrow('No estás en la sala');
         });
     });
 

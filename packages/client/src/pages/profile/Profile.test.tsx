@@ -39,7 +39,7 @@ describe('Profile page', () => {
       </MemoryRouter>
     );
 
-    expect(await screen.findByText('Lord Profile John')).toBeInTheDocument();
+    expect(await screen.findByText(/Perfil del Señor\s*John/i)).toBeInTheDocument();
     expect(screen.getByText(/john@test.com/i)).toBeInTheDocument();
     expect(screen.getByText('7')).toBeInTheDocument();
     expect(screen.getByText('5')).toBeInTheDocument();

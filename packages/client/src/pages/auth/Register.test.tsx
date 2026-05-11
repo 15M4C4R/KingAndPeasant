@@ -33,10 +33,10 @@ describe('Register page', () => {
       </MemoryRouter>
     );
 
-    await userEvent.type(screen.getByPlaceholderText('Name'), 'John');
+    await userEvent.type(screen.getByPlaceholderText('Nombre'), 'John');
     await userEvent.type(screen.getByPlaceholderText('Email'), 'john@test.com');
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'secret');
-    await userEvent.click(screen.getByRole('button', { name: 'Register' }));
+    await userEvent.type(screen.getByPlaceholderText('Contraseña'), 'secret');
+    await userEvent.click(screen.getByRole('button', { name: 'Registrar' }));
 
     await waitFor(() => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
@@ -57,10 +57,10 @@ describe('Register page', () => {
       </MemoryRouter>
     );
 
-    await userEvent.type(screen.getByPlaceholderText('Name'), 'John');
+    await userEvent.type(screen.getByPlaceholderText('Nombre'), 'John');
     await userEvent.type(screen.getByPlaceholderText('Email'), 'john@test.com');
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'secret');
-    await userEvent.click(screen.getByRole('button', { name: 'Register' }));
+    await userEvent.type(screen.getByPlaceholderText('Contraseña'), 'secret');
+    await userEvent.click(screen.getByRole('button', { name: 'Registrar' }));
 
     expect(await screen.findByText('Usuario ya registrado')).toBeInTheDocument();
     expect(mockNavigate).not.toHaveBeenCalled();

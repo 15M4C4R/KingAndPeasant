@@ -46,7 +46,7 @@ describe('Login page', () => {
     );
 
     await userEvent.type(screen.getByPlaceholderText('Email'), 'john@test.com');
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'secret');
+    await userEvent.type(screen.getByPlaceholderText('Contraseña'), 'secret');
     await userEvent.click(screen.getByRole('button', { name: 'Login' }));
 
     await waitFor(() => {
@@ -75,7 +75,7 @@ describe('Login page', () => {
     );
 
     await userEvent.type(screen.getByPlaceholderText('Email'), 'john@test.com');
-    await userEvent.type(screen.getByPlaceholderText('Password'), 'wrong');
+    await userEvent.type(screen.getByPlaceholderText('Contraseña'), 'wrong');
     await userEvent.click(screen.getByRole('button', { name: 'Login' }));
 
     expect(await screen.findByText('Credenciales inválidas')).toBeInTheDocument();
