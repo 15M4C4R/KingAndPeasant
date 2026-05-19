@@ -10,6 +10,7 @@ import { Server } from 'socket.io';
 import { createServer } from 'http';
 import { lobbySocket } from './src/sockets/LobbySocket.js';
 import { gameSocket } from './src/sockets/GameSocket.js';
+import jwt from 'jsonwebtoken';
 
 if (!process.env.JWT_SECRET) {
   console.error('FATAL ERROR: JWT_SECRET is not defined in environment variables.');
@@ -43,16 +44,31 @@ app.use('/api/friendship', friendshipRoutes);
 
 app.use('/api/game', gameRoutes);
 
+io.use((socket, next) => {
+    const token = socket.handshake.auth?.token;
+    if (!token) return next(new Error('Errore de autenticación: token no proporcionado'));
+    
+    try {
+        const decoded = jwt.verify(token, process.env.JWT_SECRET);
+        socket.userId = decoded.userId;
+        next();
+    } catch (err) {
+        return next(new Error('Error de autenticación'));
+    }
+});
 
 io.on('connection', (socket) => {
     console.log('A user connected:', socket.id);
 
+    userSockets.set(socket.userId, socket.id);
+    console.log(`User ${socket.userId} registered with socket ID: ${socket.id}`); 
+    /*
     socket.on('register', (userId) => {
         userSockets.set(userId, socket.id);
         socket.userId = userId;
         console.log(`User ${userId} registered with socket ID: ${socket.id}`);
     });
-
+    */
     lobbySocket(io, socket);
     gameSocket(io, socket);
 

@@ -110,7 +110,7 @@ const joinLobby = async ({ lobbyId, player2Id }) => {
 
 const leaveLobby = async ({ lobbyId, playerId }) => {
     const lobby = await getLobbyById(lobbyId);
-
+        
     if (!lobby) {
         throw new Error('Lobby no encontrado');
     }

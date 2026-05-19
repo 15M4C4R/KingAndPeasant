@@ -8,20 +8,19 @@ const activeDeadlines = new Map();
 
 export const gameSocket = (io, socket) => {
 
-    socket.on('joinGame', ({ roomName, userId }) => {
-        const numericUserId = Number(userId); // Forzamos que sea número
+    socket.on('joinGame', ({ roomName }) => {
+        const numericUserId = socket.userId;
         socket.join(roomName);
         socket.join(`${roomName}_user_${numericUserId}`);
-        socket.userId = numericUserId; 
         socket.roomName = roomName;
 
         cancelLobbyLeave(numericUserId);
 
-        console.log(`Socket ${socket.id} (Usuario ${userId}) se unió a: ${roomName}`);
+        console.log(`Socket ${socket.id} (Usuario ${numericUserId}) se unió a: ${roomName}`);
 
         // 1. Si EL OTRO jugador estaba desconectado, enviamos su cronómetro al que acaba de entrar
         // 2. Si YO era el que estaba desconectado, cancelamos mi timer
-        const timerKey = `${roomName}-${userId}`;
+        const timerKey = `${roomName}-${numericUserId}`;
         
         if (disconnectTimers.has(timerKey)) {
             clearTimeout(disconnectTimers.get(timerKey));
@@ -29,7 +28,7 @@ export const gameSocket = (io, socket) => {
             activeDeadlines.delete(timerKey);
             
             // Avisar a todos que el usuario volvió
-            io.to(roomName).emit('playerReconnected', { userId });
+            io.to(roomName).emit('playerReconnected', { userId: numericUserId });
         }
 
         // Sincronización: Enviamos al usuario que entra todos los deadlines activos en esta sala

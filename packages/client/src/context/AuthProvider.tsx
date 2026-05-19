@@ -31,9 +31,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
         if (socket && socket.connected) return;
 
         console.log("registering socket connection for user:", user.name);
-        const newSocket = io(import.meta.env.VITE_API_URL);
+        
+        const newSocket = io(import.meta.env.VITE_API_URL, {
+            auth: {
+                token: user.authToken
+            }
+        });
 
-        newSocket.emit("register", user.id);
+        //newSocket.emit("register", user.id);
         setSocket(newSocket);
 
         return () => {

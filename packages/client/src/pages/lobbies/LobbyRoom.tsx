@@ -32,16 +32,16 @@ function LobbyRoom() {
     useEffect(() => {
         if (!socket || !id || !user) return;
 
-        socket.emit('joinLobby', `lobby${id}`, user.id);
+        socket.emit('joinLobby', `lobby${id}`);
 
         socket.on('lobbyUpdated', () => fetchLobby(false));
         socket.on('gameStarted', () => {navigate(`/game/${id}`)});
 
-        const handleUnload = () => socket.emit('leaveLobby', user.id, id);
+        const handleUnload = () => socket.emit('leaveLobby', id);
         window.addEventListener('beforeunload', handleUnload);
 
         return () => {
-            socket.emit('leaveLobby', user.id, id);
+            socket.emit('leaveLobby', id);
             socket.off('lobbyUpdated');
             socket.off('gameStarted');
             window.removeEventListener('beforeunload', handleUnload);
@@ -120,7 +120,7 @@ function LobbyRoom() {
     
     try {
         if (socket) {
-            socket.emit('leaveLobby', user.id, id, true);
+            socket.emit('leaveLobby', id, true);
         }
         navigate("/lobbyList");
     } catch (err) {

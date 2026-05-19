@@ -49,8 +49,7 @@ export const useGameData = (id: string | undefined, user: any, socket: any) => {
     };
 
     socket.emit("joinGame", { 
-        roomName: `game_${id}`, 
-        userId: Number(user.id) 
+        roomName: `game_${id}`
     });
     socket.on("gameState", handleGameStateUpdate);
     socket.on("game:finished", (data: any) => {

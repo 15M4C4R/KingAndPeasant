@@ -15,9 +15,9 @@ export const cancelLobbyLeave = (userId) => {
 export const lobbySocket = (io, socket) => {
     
     // 1. Aceptamos userId del cliente directamente para no depender solo de socket.userId
-    socket.on('joinLobby', (roomName, clientUserId) => {
+    socket.on('joinLobby', (roomName) => {
         // Forzamos a Número para que coincida siempre con la clave del Map
-        const numId = Number(clientUserId || socket.userId);
+        const numId = Number(socket.userId);
 
         if (numId && pendingLeaves.has(numId)) {
             clearTimeout(pendingLeaves.get(numId));
@@ -32,8 +32,8 @@ export const lobbySocket = (io, socket) => {
         io.to(roomName).emit('lobbyUpdated');
     });
 
-    socket.on('leaveLobby', async (userId, lobbyId, isExplicit = false) => {
-        const numId = Number(userId);
+    socket.on('leaveLobby', async (lobbyId, isExplicit = false) => {
+        const numId = Number(socket.userId);
 
         if (isExplicit) {
             socket.leave(`lobby${lobbyId}`);
@@ -73,8 +73,9 @@ export const lobbySocket = (io, socket) => {
 
     });
 
-    socket.on('rejectGameInvite', async ({ lobbyId, rejecterName, rejecterId }) => {
+    socket.on('rejectGameInvite', async ({ lobbyId, rejecterName }) => {
         const numLobbyId = Number(lobbyId);
+        const rejecterId = socket.userId;
         try{
             const lobby =  await lobbyService.getLobbyById(numLobbyId);
             if (lobby && lobby.player1Id) {
@@ -94,7 +95,7 @@ export const lobbySocket = (io, socket) => {
         for (const room of rooms) {
            if (typeof room === 'string' && room.startsWith('lobby')) {
                 const lobbyId = room.replace('lobby', '');
-                const numId = Number(socket.userId);
+                const numId = socket.userId;
 
                 if (numId) {
                     AuxLeaveLobby(numId, lobbyId, socket, io);
