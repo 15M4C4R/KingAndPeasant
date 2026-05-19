@@ -147,7 +147,7 @@ const leaveLobby = async ({ lobbyId, playerId }) => {
 };
 
 const setPlayerReady = async ({ lobbyId, playerId, isReady }) => {
-    const lobby = await getLobbyById(lobbyId);
+const lobby = await getLobbyById(lobbyId);
 
     if (!lobby) {
         throw new Error('Lobby no encontrado');

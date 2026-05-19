@@ -50,7 +50,7 @@ io.use((socket, next) => {
     
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        socket.userId = decoded.userId;
+        socket.userId = decoded.id;
         next();
     } catch (err) {
         return next(new Error('Error de autenticación'));
