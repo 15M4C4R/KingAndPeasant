@@ -97,7 +97,7 @@ describe('AuthProvider', () => {
     });
   });
 
-  test('con usuario en storage crea socket y emite register', async () => {
+  test('con usuario en storage crea socket con el token inyectado', async () => {
     mockGetItem.mockReturnValue(
       JSON.stringify({
         id: '1',
@@ -115,7 +115,12 @@ describe('AuthProvider', () => {
 
     await waitFor(() => {
       expect(ioMock).toHaveBeenCalledTimes(1);
-      expect(socketMock.emit).toHaveBeenCalledWith('register', '1');
+      expect(ioMock).toHaveBeenCalledWith(
+        expect.anything(), 
+        expect.objectContaining({
+            auth: { token: 'token-123' }
+        })
+      );
     });
   });
 

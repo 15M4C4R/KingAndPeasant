@@ -5,11 +5,9 @@ import LobbyRoom from './LobbyRoom';
 import { useUser } from '../../hooks/useUser';
 import { useAuth } from '../../hooks/useAuth';
 
-// Mock de APIs
 import { getLobbyById, setPlayerReady } from './components/LobbyService';
 import { startGame } from '../game/components/GameService';
 
-// 1. Mocks de hooks
 vi.mock('../../hooks/useUser', () => ({
   useUser: vi.fn(),
 }));
@@ -18,7 +16,6 @@ vi.mock('../../hooks/useAuth', () => ({
   useAuth: vi.fn(),
 }));
 
-// 2. Mock de React Router
 const mockNavigate = vi.fn();
 vi.mock('react-router', async () => {
   const actual = await vi.importActual('react-router');
@@ -29,7 +26,6 @@ vi.mock('react-router', async () => {
   };
 });
 
-// 3. Mock de llamadas al backend
 vi.mock('./components/LobbyService', () => ({
   getLobbyById: vi.fn(),
   setPlayerReady: vi.fn(),
@@ -172,7 +168,7 @@ describe('LobbyRoom Component', () => {
     fireEvent.click(btnConfirmLeave);
 
     await waitFor(() => {
-        expect(mockSocketEmit).toHaveBeenCalledWith('leaveLobby', 1, '1', true);
+        expect(mockSocketEmit).toHaveBeenCalledWith('leaveLobby', '1', true);
         
         expect(mockNavigate).toHaveBeenCalledWith('/lobbyList');
     });
@@ -199,7 +195,6 @@ describe('LobbyRoom Component', () => {
   });
 
   test('Línea cubierta: if (!lobby || !user || !user.authToken) return; en executeStartGame', async () => {
-    // 1. Empezamos con el usuario validado y con TOKEN para que la página cargue correctamente
     const activeUser = { id: 1, authToken: 'fake-token' };
     (useUser as any).mockReturnValue({ user: activeUser, isLogin: true });
     
@@ -209,17 +204,14 @@ describe('LobbyRoom Component', () => {
     
     render(<BrowserRouter><LobbyRoom /></BrowserRouter>);
 
-    // Esperamos a que pase la pantalla de carga
     const btnStart = await screen.findByRole('button', { name: /COMENZAR PARTIDA/i });
     fireEvent.click(btnStart);
 
-    // 2. ¡HACEMOS TRAMPA! Le robamos el token al usuario en memoria justo antes de darle al modal
     activeUser.authToken = null as any;
 
     const btnConfirm = await screen.findByRole('button', { name: /¡A LA BATALLA!/i });
     fireEvent.click(btnConfirm);
 
-    // 3. Verificamos que el return cortó la ejecución
     expect(startGame).not.toHaveBeenCalled(); 
   });
 
